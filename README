@@ -1,0 +1,24 @@
+Guess-the-number is yet another C++ implementation of the "Guess the number" game, except that this one has a lot
+of random code that a random beginner wouldn't add. I did this to make a "foolproof" game, which cannot be broken
+by entering some random text. To run this - just copy-pase the code from main.cpp into your ide/text editor, and 
+compile the thing OR download the debug build executable from "/Debug" folder. Windows only.
+Also, this was made to test out how github works.
+
+Changes done:
+27.05.11 - Did pretty much everything I wanted to, and dumped the code in pastebin.ca
+18.07.11 - Pulled the source code from pastebin.ca (the site seemed to be dead, used google which had the cached version
+of the site. Decided to do some changes. Did the following - 
+1. Hopefully made the code look a bit more organized. Hopefully...
+2. The original code asked you numbers from 1 to 100. I changed this to go from 1 to 1 million
+3. Commented my code a bit more, adding probably 100 more useless comments.
+4. ALMOST Added a cls command which clears the screen, and removed the weird spacing.
+
+TO-DO:
+1. Make a system that shows a message depending on how close the generated number is to the one entered by the user.
+Sort of like - "It's getting colder (when the number entered is further away from the generated than the previous one)"
+and "It's getting hotter (the reverse situation)".
+2. Fix the CLS command, which displays some unwanted things when executed.
+
+NOTES:
+1. The /1000 randomly generated numbers thing is there for no reason. Then again - you have to be extremely dedicated
+to actually guess so many numbers in one session.
