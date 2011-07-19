@@ -14,52 +14,39 @@
     #include <Windows.h> // used to perform clearscreen
     #include <algorithm>  //to lowercase (for nReadInput)
     using namespace std; //For cout, so I don't have to type std:: in front of the cout's!
-    
+   
 	////////////////////////////////////////////////////////////////////////////////////////
 	//Clearscreen
 	////////////////////////////////////////////////////////////////////////////////////////
     void cls( HANDLE hConsole )
     {
-       COORD coordScreen = { 0, 0 };    // home for the cursor
+       COORD coordScreen = { 0, 0 };
        DWORD cCharsWritten;
        CONSOLE_SCREEN_BUFFER_INFO csbi;
        DWORD dwConSize;
-     
-        // Get the number of character cells in the current buffer.
-     
        if( !GetConsoleScreenBufferInfo( hConsole, &csbi ))
           return;
        dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
-     
-       // Fill the entire screen with blanks.
-     
        if( !FillConsoleOutputCharacter( hConsole, (TCHAR) ' ',
           dwConSize, coordScreen, &cCharsWritten ))
           return;
-     
-       // Get the current text attribute.
-     
        if( !GetConsoleScreenBufferInfo( hConsole, &csbi ))
           return;
-     
-       // Set the buffer's attributes accordingly.
-     
        if( !FillConsoleOutputAttribute( hConsole, csbi.wAttributes,
           dwConSize, coordScreen, &cCharsWritten ))
           return;
-     
-       // Put the cursor at its home coordinates.
-     
        SetConsoleCursorPosition( hConsole, coordScreen );
     }
     ////////////////////////////////////////////////////////////////////////////////////////     
 
 
-	// Generates a random number. If you wan't to change the max number generated, this is where to do it.
+	// Generates a random number. If you want to change the max number generated, this is where to do it.
     int nGenerate()
     {
             int number;
-            number = rand() % 1000000 + 1;
+            number = (rand() % (1000000 + 1)) * (rand() % 8 + 1);
+			if (number > 1000000)
+			{number=1000000-number;}
             return number;
     }
 
@@ -77,8 +64,8 @@
             {
                  exit(0);
             }
-			// CLS command, see readme for details.
-			/*if (sGuess =="cls") /
+			// CLS command, see README for details.
+			/* if (sGuess =="cls") 
 			{
 				HANDLE hStdout;
 				hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -93,21 +80,23 @@
        {
         return nGuess;
        }
+	  
        cout << "Invalid input, please try again: ";
      }
+			return 0; //If something goes wrong, then it will return SOMETHING. I should probably have it output an error message though.
     }
      
 
-    // Asks for imput and displays the text related.
+    // Asks for input and displays the text related.
     void ask(int nNumber, int nLoop)
     {
             cout << "You've guessed " << nLoop << "/1000 randomly generated numbers!" << endl; 
             cout << "Guess a random number from 1 - 1000000!" << endl;
             cout << "In order to exit the program, please type in 'Exit'!" << endl;
             cout << "Please enter a random number from 1-1000000: ";
+			cout << "Debug: " << nNumber << endl;
             int nInput = nReadInput();
-			cout << nInput << endl;
-            while (nInput != nNumber) //TODO: colder-hotter. (see readme)
+            while (nInput != nNumber) //TODO: colder-hotter. (see README)
             {
                     if (nInput > nNumber)
                     {
@@ -120,7 +109,7 @@
                             nInput = nReadInput();
                     }
             }
-            //This gets executed if nInput is equal to the generated number. Also the screen is cleared.
+            //This gets executed if nInput is equal to the generated number.
         HANDLE hStdout;
         hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
         cls(hStdout);
@@ -132,17 +121,16 @@
     {
             // nLoop is more for statistical info, to see how many loops I've been through.
             int nLoop = 0;
-     
+			srand ( time(NULL) );
             while (nLoop != 1000) // Used a loop, because I want the player to try and guess multiple numbers in a row ;)
 								  // 1000 is simply a random number. To be honest - you have to be extremely dedicated to
 								  // guess 1000 numbers in a row, without closing the application.
             {
-            srand ( time(NULL) );
             int nNumber = nGenerate();
             ask(nNumber,nLoop);
             nLoop++;
             }
-     
+			
             // If the player has no life (or he cheated and edited the source code), this is what's displayed.
             cout << "Whaaat!??? you actually went on and guessed 1000 numbers?" << endl << "Congratulations, you won the game! or something." << endl << "Press any key to exit";
 			cin.ignore().get(); //Give them time to actually read the message.

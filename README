@@ -12,12 +12,19 @@ of the site. Decided to do some changes. Did the following -
 2. The original code asked you numbers from 1 to 100. I changed this to go from 1 to 1 million
 3. Commented my code a bit more, adding probably 100 more useless comments.
 4. ALMOST Added a cls command which clears the screen, and removed the weird spacing.
+19.07.11 - 
+1. Managed to fix a bug that caused the generated numbers to be almost sequental (took srand out of the loop), 
+and now the numbers generated can actually be more than 5 characters long (changed stuff around in ngenerate()). the rand() sucks
+but I'm really not willing to install Boost or anything like that :/. This is a really quick hack to be honest.
+
 
 TO-DO:
 1. Make a system that shows a message depending on how close the generated number is to the one entered by the user.
 Sort of like - "It's getting colder (when the number entered is further away from the generated than the previous one)"
 and "It's getting hotter (the reverse situation)".
 2. Fix the CLS command, which displays some unwanted things when executed.
+3. Fix the bug which occurs when entering a negative number
+4. Make Number with more than 5 symbols appear more frequently.
 
 NOTES:
 1. The /1000 randomly generated numbers thing is there for no reason. Then again - you have to be extremely dedicated
