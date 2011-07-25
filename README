@@ -16,15 +16,19 @@ of the site. Decided to do some changes. Did the following -
 1. Managed to fix a bug that caused the generated numbers to be almost sequental (took srand out of the loop), 
 and now the numbers generated can actually be more than 5 characters long (changed stuff around in ngenerate()). the rand() sucks
 but I'm really not willing to install Boost or anything like that :/. This is a really quick hack to be honest.
-
+25.07.11 - 
+1. Changed around the values in the number generator. Now bigger numbers should generate more frequently. There's still chance 
+that the generated number will be bigger than 1million though.
+2. I can't recreate the negative number bug anymore, so I have to assume that it's either gone, or it was my imagination seeing
+as I wrote that thing late in night. Will be on the lookout for it.
+3. Comments re-done.
 
 TO-DO:
 1. Make a system that shows a message depending on how close the generated number is to the one entered by the user.
 Sort of like - "It's getting colder (when the number entered is further away from the generated than the previous one)"
 and "It's getting hotter (the reverse situation)".
 2. Fix the CLS command, which displays some unwanted things when executed.
-3. Fix the bug which occurs when entering a negative number
-4. Make Number with more than 5 symbols appear more frequently.
+3. [low priority] make sure that it's impossible for the program to generate a number bigger than 1 million.
 
 NOTES:
 1. The /1000 randomly generated numbers thing is there for no reason. Then again - you have to be extremely dedicated

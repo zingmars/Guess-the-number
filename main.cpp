@@ -1,20 +1,23 @@
     // 'Guess the random number' 1.1.
     // getline() from http://www.cplusplus.com/forum/articles/6046/ ;
     // cls from http://www.cplusplus.com/forum/beginner/1988/3/#msg10830 ;
-    // By zingmars , 18.07.11.
-    // There might be some wrongs in the code (it works though), some misspellings or something, bu't they can easily be fixed by someone not so good.
+    // By zingmars , 25.07.11.
+    // Code might be an unoptimized POS, and I adding new features/maintaining it isn't really easy, but note that I'm still learning C++.
     // This compiled fine with Visual Studio 2010 and should with other compilers.
-    // A bit of an overkill for such a simple game (~120 lines of code o_O), but I find this to be more functional :)
+    // A bit of an overkill for such a simple game, but I find this to be more awesome, and more foolproof :)
 	
-	#include <iostream> // needed for cout (outputting text).
-    #include <cstdlib> // needed for exit();
-    #include <sstream> // needed for stringstream
-    #include <string> // needed for String; getline()
-    #include <ctime> // needed to use time thingie, which is used to generate a "random" seed for the random number.
-    #include <Windows.h> // used to perform clearscreen
-    #include <algorithm>  //to lowercase (for nReadInput)
-    using namespace std; //For cout, so I don't have to type std:: in front of the cout's!
+	#include <iostream>
+    #include <cstdlib>
+    #include <sstream> 
+    #include <string> 
+    #include <ctime>
+    #include <Windows.h>
+    #include <algorithm> 
+    using namespace std;
    
+	int nInput = 0; // User input ( ask(); ). Made it a global variable to avoid it being reinitialized every loop.
+	int nGuess = 0; // User input ( nReadInput() ; ). Made it a global variable to avoid it being reinitialized every loop.
+
 	////////////////////////////////////////////////////////////////////////////////////////
 	//Clearscreen
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -44,36 +47,43 @@
     int nGenerate()
     {
             int number;
-            number = (rand() % (1000000 + 1)) * (rand() % 8 + 1);
+            number = (rand() % (100000 + 1)) * (rand() % 25 + 1);
+			
 			if (number > 1000000)
-			{number=1000000-number;}
+			{number=1000000 - number;}
+
+
             return number;
     }
 
 
-    // Reads the input from the player, and 'fault-checks' it. This way is a bit more complicated, but way better than cin << ;.
-	// I'm kind of considering to use switch instead of the way how the code is right now.
+    // Takes input from the player.
+	// I'm kind of considering to use switch instead of ifs.
     int nReadInput()
     {
             string sGuess = "";
-            int nGuess = 0;
+            nGuess = 0;
+
             while (true) {
+
             getline(cin,sGuess);
             transform(sGuess.begin(), sGuess.end(), sGuess.begin(), ::tolower);
-            if (sGuess == "exit") // well, there are cases when we want to exit the application.
+
+            if (sGuess == "exit") // Exit command.
             {
                  exit(0);
             }
-			// CLS command, see README for details.
-			/* if (sGuess =="cls") 
+
+			// TODO: CLS command, see README for details.
+			/* if (sGuess =="cls")  // CLS command.
 			{
 				HANDLE hStdout;
 				hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 				cls(hStdout);
 				cout << "Screen cleared; Enter a number: ";
 				break;
-			}
-			*/
+			} */
+
        // This code converts from string to number safely.
        stringstream myStream(sGuess);
        if (myStream >> nGuess)
@@ -83,19 +93,18 @@
 	  
        cout << "Invalid input, please try again: ";
      }
-			return 0; //If something goes wrong, then it will return SOMETHING. I should probably have it output an error message though.
+			return 404; // This shouldn't happen unless the code is messed up.
     }
      
-
-    // Asks for input and displays the text related.
+	// Input.
     void ask(int nNumber, int nLoop)
     {
             cout << "You've guessed " << nLoop << "/1000 randomly generated numbers!" << endl; 
             cout << "Guess a random number from 1 - 1000000!" << endl;
             cout << "In order to exit the program, please type in 'Exit'!" << endl;
             cout << "Please enter a random number from 1-1000000: ";
-			cout << "Debug: " << nNumber << endl;
-            int nInput = nReadInput();
+			cout << "Debug: " << nNumber << endl; //TODO: Remove later.
+            nInput = nReadInput();
             while (nInput != nNumber) //TODO: colder-hotter. (see README)
             {
                     if (nInput > nNumber)
@@ -109,30 +118,28 @@
                             nInput = nReadInput();
                     }
             }
-            //This gets executed if nInput is equal to the generated number.
-        HANDLE hStdout;
-        hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-        cls(hStdout);
+	        HANDLE hStdout;
+		    hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+			cls(hStdout);
             cout << "You guessed it!!!" << endl << "The number was: " << nNumber << endl << endl;
             nNumber = 0;
     }
      
     int main()
     {
-            // nLoop is more for statistical info, to see how many loops I've been through.
-            int nLoop = 0;
-			srand ( time(NULL) );
-            while (nLoop != 1000) // Used a loop, because I want the player to try and guess multiple numbers in a row ;)
-								  // 1000 is simply a random number. To be honest - you have to be extremely dedicated to
-								  // guess 1000 numbers in a row, without closing the application.
+            int nLoop = 0; // Used to show how many numbers you've guessed.
+			int nNumber = 0; // Used to hold the number the user has to guess.
+			srand ( time(NULL) ); // Random number generator seed.
+
+            while (nLoop != 1000) // Game loop.
             {
-            int nNumber = nGenerate();
+            nNumber = nGenerate();
             ask(nNumber,nLoop);
             nLoop++;
             }
 			
-            // If the player has no life (or he cheated and edited the source code), this is what's displayed.
+            // "You won!" message.
             cout << "Whaaat!??? you actually went on and guessed 1000 numbers?" << endl << "Congratulations, you won the game! or something." << endl << "Press any key to exit";
-			cin.ignore().get(); //Give them time to actually read the message.
+			cin.ignore().get();
             return 0;
     }
